@@ -1,0 +1,9 @@
+{
+    "source_data": "demo_data/utilities_demo.xlsx", // Name of the excel file containing the data to pre-populate the database
+    "database": {
+        "host": "<IP>:<PORT>",
+        "user": "<USERNAME>",
+        "pwd": "<PASSWORD>",
+        "dbname": "<DB_NAME>"
+    }
+}

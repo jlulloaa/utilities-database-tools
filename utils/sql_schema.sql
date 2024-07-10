@@ -1,0 +1,72 @@
+CREATE TABLE Customers (
+    CustomerID INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    StreetName VARCHAR(100) NOT NULL,
+    StreetNumber VARCHAR(10) NOT NULL,
+    Unit VARCHAR(50), -- This can be used for house/apt/office number
+    Town VARCHAR(100) NOT NULL,
+    City VARCHAR(100) NOT NULL,
+    State VARCHAR(100), -- Optional, depending on your needs
+    Country VARCHAR(100) NOT NULL,
+    PostalCode VARCHAR(50) NOT NULL, -- It's also useful to have a postal/zip code
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Utilities (
+    UtilityID INT AUTO_INCREMENT PRIMARY KEY,
+    UtilityName VARCHAR(100) NOT NULL,
+    UtilityUnits VARCHAR(20),
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Providers (
+    ProviderID INT AUTO_INCREMENT PRIMARY KEY,
+    UtilityID INT,
+    ProviderName VARCHAR(100) NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (UtilityID) REFERENCES Utilities(UtilityID)
+);
+
+CREATE TABLE Meters (
+    MeterID INT AUTO_INCREMENT PRIMARY KEY,
+    UtilityID INT,
+    SerialNro VARCHAR(200),
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (UtilityID) REFERENCES Utilities(UtilityID)
+);
+
+CREATE TABLE CustomerProviderUtility (
+    CustomerProviderUtilityID INT AUTO_INCREMENT PRIMARY KEY,
+    CustomerID INT,
+    ProviderID INT,
+    UtilityID INT,
+    MeterID INT,
+    CustomerNumber VARCHAR(100) NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (ProviderID) REFERENCES Providers(ProviderID),
+    FOREIGN KEY (UtilityID) REFERENCES Utilities(UtilityID),
+    FOREIGN KEY (MeterID) REFERENCES Meters(MeterID)
+);
+
+CREATE TABLE Bills (
+    BillID INT AUTO_INCREMENT PRIMARY KEY,
+    CustomerProviderUtilityID INT,
+    IssueDate DATE NOT NULL,
+    AmountBilled DECIMAL(10, 2) NOT NULL,
+    AmountConsumed DECIMAL(10, 2) NOT NULL,
+    PaymentDeadline DATE NOT NULL,
+    PaymentDate DATE,
+    Status ENUM('Paid', 'Unpaid', 'Sumario') DEFAULT 'Unpaid',
+    StartPeriod DATE NOT NULL,
+    EndPeriod DATE NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (CustomerProviderUtilityID) REFERENCES CustomerProviderUtility(CustomerProviderUtilityID)
+);

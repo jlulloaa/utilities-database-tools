@@ -396,3 +396,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Local gitignore
+.DS_Store
+config.json
+demo_data/utilities_20240709.xlsx
