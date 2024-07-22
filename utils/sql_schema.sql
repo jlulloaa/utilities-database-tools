@@ -1,5 +1,7 @@
 CREATE TABLE Customers (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    firebaseUid VARCHAR(128) NOT NULL UNIQUE, -- Firebase UID, unique for each user
+    email VARCHAR(255) NOT NULL UNIQUE, -- Email associated with the Firebase account
     FirstName VARCHAR(50) NOT NULL,
     LastName VARCHAR(50) NOT NULL,
     StreetName VARCHAR(100) NOT NULL,
